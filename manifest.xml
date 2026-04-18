@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
+  <Id>c3f2a8b5-1d47-4e92-9c36-8b5e12d4a7f3</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>CitaTesi</ProviderName>
+  <DefaultLocale>it-IT</DefaultLocale>
+  <DisplayName DefaultValue="CitaTesi"/>
+  <Description DefaultValue="Integrazione con CitaTesi per citazioni bibliografiche a norma Vademecum Unitelma."/>
+  <IconUrl DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/icon-64.png"/>
+  <SupportUrl DefaultValue="https://github.com/meccanicastefano-cloud/SoftwareTesi"/>
+  <AppDomains>
+    <AppDomain>https://meccanicastefano-cloud.github.io/citatesi-addin</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Document"/>
+  </Hosts>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/taskpane.html"/>
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Document">
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="GetStarted.Title"/>
+            <Description resid="GetStarted.Description"/>
+            <LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
+          </GetStarted>
+          <FunctionFile resid="Commands.Url" />
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <CustomTab id="CitaTesiTab">
+              <Group id="CitaTesiCitazioniGroup">
+                <Label resid="CitazioniGroup.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16x16"/>
+                  <bt:Image size="32" resid="Icon.32x32"/>
+                  <bt:Image size="80" resid="Icon.80x80"/>
+                </Icon>
+
+                <Control xsi:type="Button" id="AddEditCitationBtn">
+                  <Label resid="AddEditCitation.Label"/>
+                  <Supertip>
+                    <Title resid="AddEditCitation.Label"/>
+                    <Description resid="AddEditCitation.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="AddCitation.16x16"/>
+                    <bt:Image size="32" resid="AddCitation.32x32"/>
+                    <bt:Image size="80" resid="AddCitation.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>CitaTesiTaskpane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+
+                <Control xsi:type="Button" id="AddBibliographyBtn">
+                  <Label resid="AddBibliography.Label"/>
+                  <Supertip>
+                    <Title resid="AddBibliography.Label"/>
+                    <Description resid="AddBibliography.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Bibliography.16x16"/>
+                    <bt:Image size="32" resid="Bibliography.32x32"/>
+                    <bt:Image size="80" resid="Bibliography.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ExecuteFunction">
+                    <FunctionName>insertBibliography</FunctionName>
+                  </Action>
+                </Control>
+
+                <Control xsi:type="Button" id="InsertNoteBtn">
+                  <Label resid="InsertNote.Label"/>
+                  <Supertip>
+                    <Title resid="InsertNote.Label"/>
+                    <Description resid="InsertNote.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="InsertNote.16x16"/>
+                    <bt:Image size="32" resid="InsertNote.32x32"/>
+                    <bt:Image size="80" resid="InsertNote.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>CitaTesiTaskpane</TaskpaneId>
+                    <SourceLocation resid="InsertNote.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+
+              <Group id="CitaTesiStrumentiGroup">
+                <Label resid="StrumentiGroup.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Preferences.16x16"/>
+                  <bt:Image size="32" resid="Preferences.32x32"/>
+                  <bt:Image size="80" resid="Preferences.80x80"/>
+                </Icon>
+
+                <Control xsi:type="Button" id="UnlinkBtn">
+                  <Label resid="Unlink.Label"/>
+                  <Supertip>
+                    <Title resid="Unlink.Label"/>
+                    <Description resid="Unlink.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Unlink.16x16"/>
+                    <bt:Image size="32" resid="Unlink.32x32"/>
+                    <bt:Image size="80" resid="Unlink.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ExecuteFunction">
+                    <FunctionName>unlinkCitations</FunctionName>
+                  </Action>
+                </Control>
+
+                <Control xsi:type="Button" id="RefreshBtn">
+                  <Label resid="Refresh.Label"/>
+                  <Supertip>
+                    <Title resid="Refresh.Label"/>
+                    <Description resid="Refresh.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Refresh.16x16"/>
+                    <bt:Image size="32" resid="Refresh.32x32"/>
+                    <bt:Image size="80" resid="Refresh.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ExecuteFunction">
+                    <FunctionName>refreshCitations</FunctionName>
+                  </Action>
+                </Control>
+              </Group>
+
+              <Label resid="CitaTesiTab.Label"/>
+            </CustomTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16x16" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/icon-80.png"/>
+        <bt:Image id="AddCitation.16x16" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/add-citation-16.png"/>
+        <bt:Image id="AddCitation.32x32" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/add-citation-32.png"/>
+        <bt:Image id="AddCitation.80x80" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/add-citation-80.png"/>
+        <bt:Image id="Bibliography.16x16" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/bibliography-16.png"/>
+        <bt:Image id="Bibliography.32x32" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/bibliography-32.png"/>
+        <bt:Image id="Bibliography.80x80" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/bibliography-80.png"/>
+        <bt:Image id="Refresh.16x16" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/refresh-16.png"/>
+        <bt:Image id="Refresh.32x32" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/refresh-32.png"/>
+        <bt:Image id="Refresh.80x80" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/refresh-80.png"/>
+        <bt:Image id="Unlink.16x16" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/unlink-16.png"/>
+        <bt:Image id="Unlink.32x32" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/unlink-32.png"/>
+        <bt:Image id="Unlink.80x80" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/unlink-80.png"/>
+        <bt:Image id="Preferences.16x16" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/preferences-16.png"/>
+        <bt:Image id="Preferences.32x32" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/preferences-32.png"/>
+        <bt:Image id="Preferences.80x80" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/preferences-80.png"/>
+        <bt:Image id="InsertNote.16x16" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/insert-note-16.png"/>
+        <bt:Image id="InsertNote.32x32" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/insert-note-32.png"/>
+        <bt:Image id="InsertNote.80x80" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/insert-note-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://github.com/meccanicastefano-cloud/SoftwareTesi"/>
+        <bt:Url id="Commands.Url" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/commands.html" />
+        <bt:Url id="Taskpane.Url" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/taskpane.html"/>
+        <bt:Url id="Preferences.Url" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/taskpane.html?view=preferences"/>
+        <bt:Url id="InsertNote.Url" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/taskpane.html?view=insertnote"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GetStarted.Title" DefaultValue="CitaTesi è attivo" />
+        <bt:String id="CitaTesiTab.Label" DefaultValue="CitaTesi" />
+        <bt:String id="CitaTesiMainGroup.Label" DefaultValue="CitaTesi" />
+        <bt:String id="CitazioniGroup.Label" DefaultValue="Citazioni" />
+        <bt:String id="StrumentiGroup.Label" DefaultValue="Strumenti" />
+        <bt:String id="AddEditCitation.Label" DefaultValue="Aggiungi/Modifica citazione" />
+        <bt:String id="AddBibliography.Label" DefaultValue="Bibliografia" />
+        <bt:String id="Refresh.Label" DefaultValue="Aggiorna" />
+        <bt:String id="Unlink.Label" DefaultValue="Scollega corrente" />
+        <bt:String id="Preferences.Label" DefaultValue="Preferenze" />
+        <bt:String id="InsertNote.Label" DefaultValue="Inserisci nota" />
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="GetStarted.Description" DefaultValue="Il componente CitaTesi è stato caricato. Assicurati che l'app CitaTesi sia in esecuzione, poi apri la scheda CitaTesi nella barra degli strumenti." />
+        <bt:String id="AddEditCitation.Tooltip" DefaultValue="Inserisce una nota a piè di pagina con la fonte selezionata. Se il cursore è su una citazione esistente, la modifica." />
+        <bt:String id="AddBibliography.Tooltip" DefaultValue="Inserisce la bibliografia finale (solo dottrina) alla posizione del cursore." />
+        <bt:String id="Refresh.Tooltip" DefaultValue="Rigenera tutte le citazioni e la bibliografia in base ai dati correnti di CitaTesi." />
+        <bt:String id="Unlink.Tooltip" DefaultValue="Trasforma in testo statico la citazione (o la bibliografia) sotto il cursore: non sarà più aggiornabile. Per scollegare tutte in blocco usa il pulsante nella TaskPane." />
+        <bt:String id="Preferences.Tooltip" DefaultValue="Collega questo documento a un progetto CitaTesi." />
+        <bt:String id="InsertNote.Tooltip" DefaultValue="Inserisce al cursore una nota di studio (citazione letterale, parafrasi o riflessione) presa dalle fonti di CitaTesi." />
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>
