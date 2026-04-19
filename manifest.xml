@@ -6,8 +6,8 @@
   <DefaultLocale>it-IT</DefaultLocale>
   <DisplayName DefaultValue="CitaTesi"/>
   <Description DefaultValue="Integrazione con CitaTesi per citazioni bibliografiche a norma Vademecum Unitelma."/>
-  <IconUrl DefaultValue="https://localhost:19628/addin/assets/icon-32.png"/>
-  <HighResolutionIconUrl DefaultValue="https://localhost:19628/addin/assets/icon-64.png"/>
+  <IconUrl DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/icon-64.png"/>
   <SupportUrl DefaultValue="https://github.com/meccanicastefano-cloud/SoftwareTesi"/>
   <AppDomains>
     <AppDomain>https://localhost:19628/addin</AppDomain>
@@ -140,27 +140,27 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://localhost:19628/addin/assets/icon-16.png"/>
-        <bt:Image id="Icon.32x32" DefaultValue="https://localhost:19628/addin/assets/icon-32.png"/>
-        <bt:Image id="Icon.80x80" DefaultValue="https://localhost:19628/addin/assets/icon-80.png"/>
-        <bt:Image id="AddCitation.16x16" DefaultValue="https://localhost:19628/addin/assets/add-citation-16.png"/>
-        <bt:Image id="AddCitation.32x32" DefaultValue="https://localhost:19628/addin/assets/add-citation-32.png"/>
-        <bt:Image id="AddCitation.80x80" DefaultValue="https://localhost:19628/addin/assets/add-citation-80.png"/>
-        <bt:Image id="Bibliography.16x16" DefaultValue="https://localhost:19628/addin/assets/bibliography-16.png"/>
-        <bt:Image id="Bibliography.32x32" DefaultValue="https://localhost:19628/addin/assets/bibliography-32.png"/>
-        <bt:Image id="Bibliography.80x80" DefaultValue="https://localhost:19628/addin/assets/bibliography-80.png"/>
-        <bt:Image id="Refresh.16x16" DefaultValue="https://localhost:19628/addin/assets/refresh-16.png"/>
-        <bt:Image id="Refresh.32x32" DefaultValue="https://localhost:19628/addin/assets/refresh-32.png"/>
-        <bt:Image id="Refresh.80x80" DefaultValue="https://localhost:19628/addin/assets/refresh-80.png"/>
-        <bt:Image id="Unlink.16x16" DefaultValue="https://localhost:19628/addin/assets/unlink-16.png"/>
-        <bt:Image id="Unlink.32x32" DefaultValue="https://localhost:19628/addin/assets/unlink-32.png"/>
-        <bt:Image id="Unlink.80x80" DefaultValue="https://localhost:19628/addin/assets/unlink-80.png"/>
-        <bt:Image id="Preferences.16x16" DefaultValue="https://localhost:19628/addin/assets/preferences-16.png"/>
-        <bt:Image id="Preferences.32x32" DefaultValue="https://localhost:19628/addin/assets/preferences-32.png"/>
-        <bt:Image id="Preferences.80x80" DefaultValue="https://localhost:19628/addin/assets/preferences-80.png"/>
-        <bt:Image id="InsertNote.16x16" DefaultValue="https://localhost:19628/addin/assets/insert-note-16.png"/>
-        <bt:Image id="InsertNote.32x32" DefaultValue="https://localhost:19628/addin/assets/insert-note-32.png"/>
-        <bt:Image id="InsertNote.80x80" DefaultValue="https://localhost:19628/addin/assets/insert-note-80.png"/>
+        <bt:Image id="Icon.16x16" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/icon-80.png"/>
+        <bt:Image id="AddCitation.16x16" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/add-citation-16.png"/>
+        <bt:Image id="AddCitation.32x32" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/add-citation-32.png"/>
+        <bt:Image id="AddCitation.80x80" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/add-citation-80.png"/>
+        <bt:Image id="Bibliography.16x16" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/bibliography-16.png"/>
+        <bt:Image id="Bibliography.32x32" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/bibliography-32.png"/>
+        <bt:Image id="Bibliography.80x80" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/bibliography-80.png"/>
+        <bt:Image id="Refresh.16x16" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/refresh-16.png"/>
+        <bt:Image id="Refresh.32x32" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/refresh-32.png"/>
+        <bt:Image id="Refresh.80x80" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/refresh-80.png"/>
+        <bt:Image id="Unlink.16x16" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/unlink-16.png"/>
+        <bt:Image id="Unlink.32x32" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/unlink-32.png"/>
+        <bt:Image id="Unlink.80x80" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/unlink-80.png"/>
+        <bt:Image id="Preferences.16x16" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/preferences-16.png"/>
+        <bt:Image id="Preferences.32x32" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/preferences-32.png"/>
+        <bt:Image id="Preferences.80x80" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/preferences-80.png"/>
+        <bt:Image id="InsertNote.16x16" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/insert-note-16.png"/>
+        <bt:Image id="InsertNote.32x32" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/insert-note-32.png"/>
+        <bt:Image id="InsertNote.80x80" DefaultValue="https://meccanicastefano-cloud.github.io/citatesi-addin/assets/insert-note-80.png"/>
       </bt:Images>
       <bt:Urls>
         <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://github.com/meccanicastefano-cloud/SoftwareTesi"/>
