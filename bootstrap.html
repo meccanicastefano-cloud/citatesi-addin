@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<title>CitaTesi</title>
+<!-- office.js serve per Office.onReady: gli eventi load diretti non bastano
+     per un taskpane Office, il contesto host attende un ack Office -->
+<script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+<style>
+:root {
+  --primary: #a60921;
+  --primary-hover: #8b0519;
+  --text: #1a1a1a;
+  --muted: #666;
+  --surface: #ffffff;
+  --bg: #f5f5f5;
+  --border: #d0d0d0;
+  --warning-bg: #fff6ea;
+  --warning-border: #f0c578;
+  --warning-text: #7a4a00;
+}
+* { box-sizing: border-box; }
+html, body {
+  height: 100%; margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  color: var(--text); background: var(--bg);
+  font-size: 14px;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+}
+.loading {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--muted);
+}
+.spinner {
+  width: 32px; height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.offline {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  gap: 0.7rem;
+}
+.card {
+  background: var(--warning-bg);
+  border: 1px solid var(--warning-border);
+  border-radius: 8px;
+  padding: 2rem 1.2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 340px;
+  width: 100%;
+}
+.icon { font-size: 2.4rem; line-height: 1; }
+.title { margin: 0; font-weight: 600; font-size: 1rem; color: var(--warning-text); }
+.body { margin: 0; font-size: 0.9rem; color: var(--warning-text); max-width: 280px; }
+.btn {
+  font: inherit;
+  padding: 0.55em 0.9em;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+  margin-top: 0.4rem;
+  width: 100%;
+  max-width: 240px;
+}
+.btn:hover { background: var(--bg); }
+.btn.primary {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+.btn.primary:hover { background: var(--primary-hover); }
+.status {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.8rem;
+}
+.status.polling { color: var(--primary); }
+</style>
+</head>
+<body>
+<!-- Stato 1 (default): verifica connessione al server HTTPS locale di CitaTesi.
+     Appena pronto Office, parte il first health check; se ok -> redirect
+     immediato al taskpane vero; se fallito -> nascondi e mostra offline. -->
+<div id="loading" class="loading">
+  <div class="spinner" aria-hidden="true"></div>
+  <div>Connessione a CitaTesi…</div>
+</div>
+
+<!-- Stato 2: CitaTesi non raggiungibile. Pulsante primary avvia l'app via
+     protocol handler `citatesi://`; un polling parallelo controlla ogni
+     2s se il server risale, in quel caso fa redirect automatico. -->
+<div id="offline" class="offline" hidden>
+  <div class="card">
+    <div class="icon" aria-hidden="true">&#9888;</div>
+    <p class="title">CitaTesi non è in esecuzione</p>
+    <p class="body">Per usare CitaTesi in Word, avvia prima l'app.</p>
+    <button id="openBtn" class="btn primary" type="button">📂 Apri CitaTesi</button>
+    <button id="retryBtn" class="btn" type="button">🔄 Riprova</button>
+    <div id="pollStatus" class="status"></div>
+  </div>
+</div>
+
+<script>
+// URL del taskpane vero, servito dal server HTTPS locale di CitaTesi su
+// :19628/addin/. Valori iniettati a build time da HtmlWebpackPlugin via
+// templateParameters (sintassi lodash <%= %>). Vedi webpack.config.js.
+var TASKPANE_BASE = "https://localhost:19628/addin/";
+// Health endpoint esposto dal server HTTPS; `/health` è leggero (no DB),
+// risponde 200 appena il listener HTTPS accetta connessioni.
+var HEALTH_URL = "https://localhost:19628/health";
+
+var params = new URLSearchParams(window.location.search);
+var view = params.get("view") || "";
+// Propaga eventuali query param (es. ?view=insertnote) al taskpane vero:
+// il ribbon InsertNote punta a bootstrap.html?view=insertnote, dopo il
+// redirect l'URL finale deve essere taskpane.html?view=insertnote.
+var target = TASKPANE_BASE + "taskpane.html" + (view ? "?view=" + encodeURIComponent(view) : "");
+
+var loadingEl = document.getElementById("loading");
+var offlineEl = document.getElementById("offline");
+var openBtn = document.getElementById("openBtn");
+var retryBtn = document.getElementById("retryBtn");
+var pollStatus = document.getElementById("pollStatus");
+
+var pollingTimer = null;
+var pollingTicks = 0;
+
+function checkHealth() {
+  // `cache: "no-store"` evita che Office/Edge serva una risposta cached
+  // positiva di una sessione passata quando il server è ora down.
+  // Timeout ~2.5s via AbortController: un bind TCP stallo non deve
+  // tenere l'utente in attesa indefinita.
+  return new Promise(function(resolve) {
+    var ctrl = new AbortController();
+    var timer = setTimeout(function() { ctrl.abort(); }, 2500);
+    fetch(HEALTH_URL, { method: "GET", cache: "no-store", signal: ctrl.signal })
+      .then(function(r) { clearTimeout(timer); resolve(r.ok); })
+      .catch(function() { clearTimeout(timer); resolve(false); });
+  });
+}
+
+function redirectToTaskpane() {
+  // `replace` invece di `assign`: rimuove il bootstrap dalla history così
+  // un back del browser Office non torna qui (che farebbe un loop).
+  window.location.replace(target);
+}
+
+function showOffline() {
+  loadingEl.hidden = true;
+  offlineEl.hidden = false;
+  startPolling();
+}
+
+function startPolling() {
+  if (pollingTimer) return;
+  pollingTicks = 0;
+  pollingTimer = setInterval(function() {
+    pollingTicks += 1;
+    pollStatus.className = "status polling";
+    pollStatus.textContent = "Controllo ogni 2s… (" + pollingTicks + ")";
+    checkHealth().then(function(up) {
+      if (up) {
+        clearInterval(pollingTimer);
+        pollingTimer = null;
+        pollStatus.textContent = "Connesso — carico l'add-in…";
+        setTimeout(redirectToTaskpane, 150);
+      }
+    });
+  }, 2000);
+}
+
+openBtn.addEventListener("click", function() {
+  // Protocol handler `citatesi://` registrato da CitaTesi al setup
+  // (src-tauri/src/protocol_handler.rs). Windows risolve HKCU\Software\
+  // Classes\citatesi\shell\open\command e lancia l'exe.
+  window.location.href = "citatesi://open";
+  pollStatus.className = "status polling";
+  pollStatus.textContent = "Avvio di CitaTesi in corso…";
+});
+
+retryBtn.addEventListener("click", function() {
+  offlineEl.hidden = true;
+  loadingEl.hidden = false;
+  if (pollingTimer) {
+    clearInterval(pollingTimer);
+    pollingTimer = null;
+  }
+  boot();
+});
+
+function boot() {
+  checkHealth().then(function(up) {
+    if (up) redirectToTaskpane();
+    else showOffline();
+  });
+}
+
+// Office.onReady resolve anche in contesti non-Office dopo un piccolo
+// timeout — serve però a segnalare al host Office che siamo pronti,
+// senza il browser potrebbe mostrare il loading Office generico per
+// secondi inutili prima di renderizzare il nostro loading custom.
+if (typeof Office !== "undefined" && Office.onReady) {
+  Office.onReady().then(boot).catch(boot);
+} else {
+  boot();
+}
+</script>
+</body>
+</html>
