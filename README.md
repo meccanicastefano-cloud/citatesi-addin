@@ -12,10 +12,9 @@ di GitHub non supporta Pages su repo privati.
 ```powershell
 # Nel repo principale SoftwareTesi:
 cd word-addin
-npm run build
-# copia dist/* qui, commit, push
+npm run deploy   # build + clone di questo repo in %TEMP% + copia dist/* + commit + push
 ```
 
-I dati dell'utente CitaTesi **non passano mai** da questo hosting: Word comunica
-direttamente col server locale `http://localhost:19627` per fonti, citazioni e
-bibliografia. Qui viaggiano solo asset statici pubblici.
+I dati dell'utente CitaTesi **non passano mai** da questo hosting: il taskpane comunica
+direttamente col server locale `https://localhost:19628` per fonti, citazioni e
+bibliografia. Qui viaggiano solo asset statici pubblici (bootstrap e icone usati dalle installazioni).
